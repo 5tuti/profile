@@ -1,0 +1,978 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --cream:#faf6f1;--blush:#f2d8d8;--champagne:#f5e6c8;--rose:#d4a0a0;--gold:#c9a96e;--muted-sage:#b8c4b8;--dusty:#c8a8b0;--pearl:#fdfaf7;
+    --text-dark:#2c2220;--text-mid:#5a4a48;--text-light:#8a7a78;
+  }
+  body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:rgba(250,246,241,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,169,110,0.2);padding:0 2rem}
+  .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--text-dark);letter-spacing:0.05em;cursor:pointer}
+  .nav-logo span{color:var(--gold)}
+  .nav-links{display:flex;gap:1.5rem;list-style:none}
+  .nav-links a{font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);cursor:pointer;transition:color 0.3s;text-decoration:none}
+  .nav-links a:hover{color:var(--gold)}
+  .nav-cta{background:var(--text-dark);color:var(--pearl);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.5rem 1.25rem;border:none;cursor:pointer;transition:all 0.3s;font-family:'Jost',sans-serif}
+  .nav-cta:hover{background:var(--gold)}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+  .hamburger span{width:22px;height:1.5px;background:var(--text-dark);transition:all 0.3s}
+
+  /* HERO */
+  .hero{min-height:calc(100vh - 60px);display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
+  .hero-text{display:flex;flex-direction:column;justify-content:center;padding:4rem 3rem 4rem 4rem;position:relative;z-index:2}
+  .hero-kicker{font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem}
+  .hero-h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,4vw,4.2rem);line-height:1.1;color:var(--text-dark);margin-bottom:1.5rem}
+  .hero-h1 em{color:var(--rose);font-style:italic}
+  .hero-sub{font-size:1rem;line-height:1.8;color:var(--text-mid);max-width:420px;margin-bottom:2.5rem;font-weight:300}
+  .btn-row{display:flex;flex-wrap:wrap;gap:0.75rem}
+  .btn-primary{background:var(--text-dark);color:var(--pearl);padding:0.85rem 2rem;border:none;cursor:pointer;font-family:'Jost',sans-serif;font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s}
+  .btn-primary:hover{background:var(--gold)}
+  .btn-outline{background:transparent;color:var(--text-dark);padding:0.85rem 2rem;border:1px solid var(--text-dark);cursor:pointer;font-family:'Jost',sans-serif;font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s}
+  .btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+  .btn-ghost{background:transparent;color:var(--text-mid);padding:0.85rem 1.5rem;border:1px solid rgba(90,74,72,0.3);cursor:pointer;font-family:'Jost',sans-serif;font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;transition:all 0.3s}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+  .hero-img-side{position:relative;overflow:hidden;background:linear-gradient(135deg,#e8d5d5 0%,#d4bcbc 100%)}
+  .hero-img-overlay{position:absolute;inset:0;background:linear-gradient(to left,rgba(250,246,241,0) 60%,rgba(250,246,241,0.4) 100%);z-index:1}
+  .hero-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
+  .hero-name-stamp{position:absolute;bottom:3rem;right:2.5rem;z-index:2;font-family:'Playfair Display',serif;font-style:italic;font-size:3rem;color:rgba(255,255,255,0.35);line-height:1;user-select:none}
+  .sparkle{position:absolute;width:6px;height:6px;background:var(--gold);border-radius:50%;opacity:0;animation:twinkle 3s infinite}
+  @keyframes twinkle{0%,100%{opacity:0;transform:scale(0)}50%{opacity:0.6;transform:scale(1)}}
+  .hero-scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;opacity:0.4;animation:fadeup 2s 1s both}
+  @keyframes fadeup{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:0.4;transform:translateX(-50%) translateY(0)}}
+  .scroll-line{width:1px;height:40px;background:var(--text-mid);animation:scrolldown 2s 1s infinite}
+  @keyframes scrolldown{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+  /* SECTIONS */
+  section{max-width:1200px;margin:0 auto;padding:5rem 2rem}
+  .section-label{font-size:0.7rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block}
+  .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.8rem);line-height:1.2;color:var(--text-dark);margin-bottom:1rem}
+  .section-title em{color:var(--rose);font-style:italic}
+  .section-sub{font-size:0.95rem;line-height:1.8;color:var(--text-mid);font-weight:300;max-width:520px}
+  .divider-wave{width:100%;height:60px;background:none;overflow:hidden}
+  .divider-wave svg{width:100%;height:60px}
+  .bg-blush{background:linear-gradient(135deg,#faf0f0 0%,#fdf6f0 100%)}
+  .bg-champagne{background:linear-gradient(135deg,#fdf8f0 0%,#faf6f1 100%)}
+  .full-bleed{max-width:100%;padding-left:0;padding-right:0}
+  .full-bleed-inner{max-width:1200px;margin:0 auto;padding:0 2rem}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:center}
+  .about-img-frame{position:relative;aspect-ratio:3/4;background:linear-gradient(135deg,#e8d5d5,#d4bcbc);overflow:hidden;max-width:340px}
+  .about-img-frame::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;border:1px solid rgba(201,169,110,0.4);pointer-events:none;z-index:2}
+  .about-img-placeholder{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2rem}
+  .about-img-name{font-family:'Playfair Display',serif;font-style:italic;font-size:2.5rem;color:rgba(255,255,255,0.6)}
+  .about-text p{font-size:0.95rem;line-height:1.9;color:var(--text-mid);margin-bottom:1rem;font-weight:300}
+  .about-stats{display:flex;gap:2.5rem;margin:2rem 0}
+  .stat-item{text-align:center}
+  .stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold);display:block}
+  .stat-label{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-light)}
+  .signature{font-family:'Playfair Display',serif;font-style:italic;font-size:2rem;color:var(--rose);margin-top:1.5rem}
+
+  /* SERVICES */
+  .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:3rem}
+  .service-card{background:var(--pearl);border:1px solid rgba(201,169,110,0.2);padding:2rem;cursor:pointer;transition:all 0.4s;position:relative;overflow:hidden}
+  .service-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transition:transform 0.4s;transform-origin:left}
+  .service-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(44,34,32,0.1)}
+  .service-card:hover::before{transform:scaleX(1)}
+  .service-icon{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blush),var(--champagne));display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.1rem}
+  .service-name{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--text-dark);margin-bottom:0.5rem}
+  .service-desc{font-size:0.85rem;line-height:1.7;color:var(--text-mid);font-weight:300;margin-bottom:1.25rem}
+  .service-price{font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold)}
+  .service-arrow{position:absolute;bottom:1.5rem;right:1.5rem;opacity:0;transform:translateX(-8px);transition:all 0.3s;color:var(--gold);font-size:1.2rem}
+  .service-card:hover .service-arrow{opacity:1;transform:translateX(0)}
+
+  /* STYLE QUIZ */
+  .quiz-container{background:var(--pearl);border:1px solid rgba(201,169,110,0.2);max-width:680px;margin:3rem auto 0;padding:2.5rem}
+  .quiz-header{margin-bottom:2rem}
+  .quiz-progress{display:flex;gap:6px;margin-bottom:1.5rem}
+  .quiz-dot{height:3px;flex:1;background:rgba(201,169,110,0.2);border-radius:2px;transition:background 0.4s}
+  .quiz-dot.active{background:var(--gold)}
+  .quiz-q{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--text-dark);margin-bottom:0.5rem}
+  .quiz-sub{font-size:0.85rem;color:var(--text-light);margin-bottom:1.5rem;font-weight:300}
+  .quiz-options{display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem}
+  .quiz-opt{background:transparent;border:1px solid rgba(90,74,72,0.2);padding:0.85rem 1rem;cursor:pointer;font-family:'Jost',sans-serif;font-size:0.85rem;color:var(--text-mid);transition:all 0.3s;text-align:left}
+  .quiz-opt:hover{border-color:var(--gold);color:var(--gold)}
+  .quiz-opt.selected{border-color:var(--gold);background:rgba(201,169,110,0.08);color:var(--gold)}
+  .quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem}
+  .quiz-step-label{font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-light)}
+  .quiz-result{text-align:center;animation:fadeIn 0.6s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .quiz-result-title{font-family:'Playfair Display',serif;font-size:2rem;color:var(--text-dark);margin-bottom:0.5rem}
+  .quiz-result-badge{display:inline-block;background:linear-gradient(135deg,var(--blush),var(--champagne));padding:0.4rem 1.5rem;font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dark);margin-bottom:1.5rem;border-radius:2px}
+  .quiz-result-desc{font-size:0.95rem;line-height:1.8;color:var(--text-mid);font-weight:300;margin-bottom:2rem;max-width:480px;margin-left:auto;margin-right:auto}
+
+  /* PERSONAL SHOPPER */
+  .shopper-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:3rem;align-items:start}
+  .shopper-panel{background:var(--pearl);border:1px solid rgba(201,169,110,0.2);padding:2rem}
+  .panel-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text-dark);margin-bottom:1.25rem}
+  .budget-slider{width:100%;margin:0.75rem 0;accent-color:var(--gold)}
+  .budget-display{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:0.5rem}
+  .occasion-grid{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem}
+  .occasion-tag{background:transparent;border:1px solid rgba(90,74,72,0.2);padding:0.4rem 0.85rem;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;color:var(--text-mid);transition:all 0.3s;border-radius:50px}
+  .occasion-tag:hover{border-color:var(--gold);color:var(--gold)}
+  .occasion-tag.active{background:var(--gold);border-color:var(--gold);color:#fff}
+  .wishlist-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid rgba(201,169,110,0.15)}
+  .wishlist-item:last-child{border-bottom:none}
+  .wishlist-dot{width:40px;height:40px;background:linear-gradient(135deg,var(--blush),var(--champagne));border-radius:4px;flex-shrink:0}
+  .wishlist-info{flex:1}
+  .wishlist-name{font-size:0.85rem;color:var(--text-dark);font-weight:500}
+  .wishlist-price{font-size:0.78rem;color:var(--gold)}
+  .wishlist-heart{background:none;border:none;cursor:pointer;color:var(--rose);font-size:1rem;padding:0;transition:transform 0.2s}
+  .wishlist-heart:hover{transform:scale(1.2)}
+
+  /* DASHBOARD */
+  .dashboard{background:var(--pearl);border:1px solid rgba(201,169,110,0.2);margin-top:3rem;padding:2rem}
+  .dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid rgba(201,169,110,0.2)}
+  .dash-greeting{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text-dark)}
+  .dash-meta{font-size:0.78rem;color:var(--text-light);letter-spacing:0.05em;margin-top:0.2rem}
+  .dash-tabs{display:flex;gap:0;border-bottom:1px solid rgba(201,169,110,0.2);margin-bottom:2rem}
+  .dash-tab{background:none;border:none;padding:0.6rem 1.25rem;font-family:'Jost',sans-serif;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);cursor:pointer;position:relative;transition:color 0.3s;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .dash-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+  .dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+  .dash-stat{background:linear-gradient(135deg,rgba(250,240,240,0.6),rgba(253,246,240,0.6));padding:1rem;border-radius:4px}
+  .dash-stat-num{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold)}
+  .dash-stat-label{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light);margin-top:0.25rem}
+  .lookbook-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;margin-top:1rem}
+  .lookbook-item{aspect-ratio:3/4;background:linear-gradient(135deg,#e8d5d5,#d4bcbc);border-radius:4px;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden}
+  .lookbook-item:hover{transform:scale(1.02)}
+  .lookbook-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(44,34,32,0.7));padding:0.75rem 0.5rem 0.5rem;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#fff}
+  .msg-thread{border:1px solid rgba(201,169,110,0.15);border-radius:4px;overflow:hidden}
+  .msg-item{padding:1rem;display:flex;gap:0.75rem;align-items:flex-start;border-bottom:1px solid rgba(201,169,110,0.1)}
+  .msg-item:last-child{border-bottom:none}
+  .msg-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--dusty));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:0.85rem;color:#fff}
+  .msg-content{flex:1}
+  .msg-name{font-size:0.82rem;font-weight:500;color:var(--text-dark)}
+  .msg-text{font-size:0.8rem;color:var(--text-mid);margin-top:0.2rem;font-weight:300}
+  .msg-time{font-size:0.7rem;color:var(--text-light);margin-top:0.2rem}
+  .msg-input-row{display:flex;gap:0.5rem;margin-top:1rem}
+  .msg-input{flex:1;border:1px solid rgba(201,169,110,0.2);background:transparent;padding:0.6rem 0.75rem;font-family:'Jost',sans-serif;font-size:0.82rem;color:var(--text-dark);outline:none}
+  .msg-input:focus{border-color:var(--gold)}
+
+  /* TESTIMONIALS */
+  .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem}
+  .testi-card{background:var(--pearl);border:1px solid rgba(201,169,110,0.15);padding:2rem;position:relative}
+  .testi-quote{font-size:3rem;color:rgba(201,169,110,0.25);font-family:'Playfair Display',serif;line-height:1;position:absolute;top:1rem;right:1.5rem}
+  .testi-text{font-size:0.9rem;line-height:1.8;color:var(--text-mid);font-style:italic;margin-bottom:1.5rem;font-weight:300}
+  .testi-author{display:flex;align-items:center;gap:0.75rem}
+  .testi-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blush),var(--champagne))}
+  .testi-name{font-size:0.85rem;font-weight:500;color:var(--text-dark)}
+  .testi-role{font-size:0.75rem;color:var(--text-light)}
+  .testi-stars{color:var(--gold);font-size:0.8rem;letter-spacing:0.1em;margin-bottom:0.75rem}
+
+  /* BEFORE/AFTER */
+  .ba-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;margin-top:3rem}
+  .ba-card{border:1px solid rgba(201,169,110,0.15)}
+  .ba-images{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+  .ba-img{aspect-ratio:2/3;position:relative;overflow:hidden}
+  .ba-img-before{background:linear-gradient(135deg,#d0c0c0,#c8b8b8)}
+  .ba-img-after{background:linear-gradient(135deg,#e8d5d5,#d4bcbc)}
+  .ba-badge{position:absolute;top:0.5rem;left:0.5rem;background:rgba(44,34,32,0.75);color:#fff;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.25rem 0.5rem}
+  .ba-info{padding:1.25rem;background:var(--pearl)}
+  .ba-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--text-dark)}
+  .ba-detail{font-size:0.78rem;color:var(--text-light);margin-top:0.2rem}
+
+  /* PRICING */
+  .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin-top:3rem}
+  .price-card{border:1px solid rgba(201,169,110,0.2);padding:2rem;position:relative;transition:all 0.4s;cursor:pointer}
+  .price-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(44,34,32,0.08)}
+  .price-card.featured{border-color:var(--gold);background:linear-gradient(135deg,rgba(201,169,110,0.05),rgba(250,240,240,0.3))}
+  .price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.3rem 1rem;white-space:nowrap}
+  .price-tier{font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem}
+  .price-num{font-family:'Playfair Display',serif;font-size:2.8rem;color:var(--text-dark);line-height:1}
+  .price-num span{font-size:1.2rem;vertical-align:top;margin-top:0.5rem;display:inline-block;color:var(--text-light)}
+  .price-period{font-size:0.78rem;color:var(--text-light);margin-bottom:1.5rem}
+  .price-features{list-style:none;margin-bottom:2rem}
+  .price-features li{font-size:0.85rem;color:var(--text-mid);padding:0.4rem 0;border-bottom:1px solid rgba(201,169,110,0.1);display:flex;align-items:center;gap:0.5rem;font-weight:300}
+  .price-features li::before{content:'—';color:var(--gold);flex-shrink:0}
+
+  /* FAQ */
+  .faq-list{margin-top:3rem;max-width:680px;margin-left:auto;margin-right:auto}
+  .faq-item{border-bottom:1px solid rgba(201,169,110,0.2)}
+  .faq-q{width:100%;background:none;border:none;padding:1.25rem 0;display:flex;justify-content:space-between;align-items:center;font-family:'Jost',sans-serif;font-size:0.95rem;color:var(--text-dark);cursor:pointer;text-align:left;font-weight:400}
+  .faq-q:hover{color:var(--gold)}
+  .faq-icon{font-size:1.2rem;color:var(--gold);transition:transform 0.3s;flex-shrink:0;margin-left:1rem}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
+  .faq-a.open{max-height:200px}
+  .faq-a p{font-size:0.88rem;line-height:1.8;color:var(--text-mid);padding-bottom:1.25rem;font-weight:300}
+
+  /* CONTACT */
+  .contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;margin-top:3rem;align-items:start}
+  .contact-info{display:flex;flex-direction:column;gap:1.5rem}
+  .contact-item{display:flex;gap:1rem;align-items:flex-start}
+  .contact-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--blush),var(--champagne));display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;font-size:1rem}
+  .contact-label{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem}
+  .contact-val{font-size:0.9rem;color:var(--text-mid);font-weight:300}
+  .contact-form{display:flex;flex-direction:column;gap:1rem}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .form-field{display:flex;flex-direction:column;gap:0.4rem}
+  .form-label{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light)}
+  .form-input,.form-textarea{border:1px solid rgba(201,169,110,0.25);background:transparent;padding:0.75rem;font-family:'Jost',sans-serif;font-size:0.88rem;color:var(--text-dark);outline:none;transition:border-color 0.3s;width:100%}
+  .form-input:focus,.form-textarea:focus{border-color:var(--gold)}
+  .form-textarea{resize:vertical;min-height:100px}
+
+  /* BOOKING */
+  .booking-cal{background:var(--pearl);border:1px solid rgba(201,169,110,0.2);padding:2rem;max-width:480px;margin:3rem auto 0}
+  .cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+  .cal-nav{background:none;border:1px solid rgba(201,169,110,0.3);width:32px;height:32px;cursor:pointer;color:var(--gold);font-size:1rem;transition:all 0.3s;display:flex;align-items:center;justify-content:center}
+  .cal-nav:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
+  .cal-month{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text-dark)}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+  .cal-day-label{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);padding:0.25rem 0}
+  .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:0.82rem;color:var(--text-mid);cursor:pointer;border-radius:50%;transition:all 0.2s;border:1px solid transparent}
+  .cal-day:hover{border-color:var(--gold);color:var(--gold)}
+  .cal-day.available{color:var(--text-dark);font-weight:500}
+  .cal-day.selected{background:var(--gold);color:#fff;border-color:var(--gold)}
+  .cal-day.disabled{color:rgba(90,74,72,0.2);cursor:default}
+  .cal-day.today{border-color:var(--rose);color:var(--rose)}
+  .time-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-top:1.5rem}
+  .time-slot{background:transparent;border:1px solid rgba(201,169,110,0.25);padding:0.6rem;font-size:0.78rem;letter-spacing:0.05em;color:var(--text-mid);cursor:pointer;font-family:'Jost',sans-serif;transition:all 0.3s}
+  .time-slot:hover{border-color:var(--gold);color:var(--gold)}
+  .time-slot.selected{background:var(--gold);color:#fff;border-color:var(--gold)}
+
+  /* FOOTER */
+  footer{background:var(--text-dark);color:var(--pearl);padding:4rem 2rem 2rem}
+  .footer-inner{max-width:1200px;margin:0 auto}
+  .footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+  .footer-brand{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:1rem}
+  .footer-brand span{color:var(--gold)}
+  .footer-tagline{font-size:0.82rem;line-height:1.7;color:rgba(253,250,247,0.5);font-weight:300}
+  .footer-h{font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+  .footer-links{list-style:none;display:flex;flex-direction:column;gap:0.5rem}
+  .footer-links a{font-size:0.82rem;color:rgba(253,250,247,0.5);cursor:pointer;transition:color 0.3s;text-decoration:none}
+  .footer-links a:hover{color:var(--pearl)}
+  .footer-social{display:flex;gap:0.75rem;margin-top:1.5rem}
+  .social-btn{width:36px;height:36px;border:1px solid rgba(253,250,247,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;color:rgba(253,250,247,0.5);font-size:0.9rem;background:none}
+  .social-btn:hover{border-color:var(--gold);color:var(--gold)}
+  .footer-bottom{border-top:1px solid rgba(253,250,247,0.1);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;color:rgba(253,250,247,0.35)}
+
+  /* MOBILE MENU */
+  .mobile-menu{position:fixed;top:60px;left:0;right:0;background:rgba(250,246,241,0.98);backdrop-filter:blur(16px);border-bottom:1px solid rgba(201,169,110,0.2);z-index:99;display:none;padding:1.5rem 2rem;flex-direction:column;gap:1rem}
+  .mobile-menu.open{display:flex}
+  .mobile-menu a{font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);cursor:pointer;text-decoration:none;padding:0.5rem 0;border-bottom:1px solid rgba(201,169,110,0.1)}
+  .mobile-menu a:hover{color:var(--gold)}
+
+  /* ANIMATIONS */
+  .fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease}
+  .fade-in.visible{opacity:1;transform:translateY(0)}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr;min-height:auto}
+    .hero-img-side{height:50vw;max-height:300px}
+    .hero-text{padding:3rem 2rem}
+    .about-grid,.shopper-grid,.contact-grid{grid-template-columns:1fr}
+    .footer-grid{grid-template-columns:1fr 1fr}
+    .nav-links,.nav-cta{display:none}
+    .hamburger{display:flex}
+    .dash-grid{grid-template-columns:1fr 1fr}
+    .lookbook-row{grid-template-columns:repeat(3,1fr)}
+    .form-row{grid-template-columns:1fr}
+  }
+  @media(max-width:600px){
+    .pricing-grid,.services-grid{grid-template-columns:1fr}
+    .footer-grid{grid-template-columns:1fr}
+    .quiz-options{grid-template-columns:1fr}
+    .lookbook-row{grid-template-columns:repeat(2,1fr)}
+    .dash-grid{grid-template-columns:1fr}
+  }
+</style>
+
+<h2 class="sr-only">Kiah Parikh — Fashion Stylist and Personal Shopper Website</h2>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">Kiah <span>Parikh</span></div>
+    <ul class="nav-links">
+      <li><a onclick="scrollToSection('about')">About</a></li>
+      <li><a onclick="scrollToSection('services')">Services</a></li>
+      <li><a onclick="scrollToSection('quiz')">Style Quiz</a></li>
+      <li><a onclick="scrollToSection('shopper')">Shop</a></li>
+      <li><a onclick="scrollToSection('pricing')">Pricing</a></li>
+      <li><a onclick="scrollToSection('testimonials')">Reviews</a></li>
+      <li><a onclick="scrollToSection('contact')">Contact</a></li>
+    </ul>
+    <button class="nav-cta" onclick="scrollToSection('booking')">Book Now</button>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="scrollToSection('about');toggleMenu()">About</a>
+  <a onclick="scrollToSection('services');toggleMenu()">Services</a>
+  <a onclick="scrollToSection('quiz');toggleMenu()">Style Quiz</a>
+  <a onclick="scrollToSection('shopper');toggleMenu()">Personal Shopper</a>
+  <a onclick="scrollToSection('dashboard');toggleMenu()">Dashboard</a>
+  <a onclick="scrollToSection('pricing');toggleMenu()">Pricing</a>
+  <a onclick="scrollToSection('testimonials');toggleMenu()">Reviews</a>
+  <a onclick="scrollToSection('contact');toggleMenu()">Contact</a>
+  <a onclick="scrollToSection('booking');toggleMenu()">Book Now</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-text">
+    <span class="hero-kicker">Fashion Stylist & Personal Shopper</span>
+    <h1 class="hero-h1">Your Dream<br>Wardrobe<br><em>Starts Here.</em></h1>
+    <p class="hero-sub">I help women build confidence through intentional style — from curated personal shopping to complete wardrobe transformations, tailored entirely to your life.</p>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="scrollToSection('booking')">Book a Styling Session</button>
+      <button class="btn-outline" onclick="scrollToSection('quiz')">Take the Style Quiz</button>
+      <button class="btn-ghost" onclick="scrollToSection('services')">Browse Services</button>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+  <div class="hero-img-side">
+    <div class="hero-img-overlay"></div>
+    <div class="hero-img-placeholder">
+      <div style="text-align:center;color:rgba(255,255,255,0.35);font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;padding:2rem">Your portrait<br>here</div>
+    </div>
+    <div class="hero-name-stamp">Kiah<br>Parikh</div>
+    <!-- Sparkles -->
+    <div class="sparkle" style="top:15%;left:30%;animation-delay:0s"></div>
+    <div class="sparkle" style="top:45%;left:70%;animation-delay:0.8s"></div>
+    <div class="sparkle" style="top:75%;left:20%;animation-delay:1.6s"></div>
+    <div class="sparkle" style="top:30%;left:80%;animation-delay:2.4s"></div>
+    <div class="sparkle" style="top:60%;left:50%;animation-delay:1.2s"></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="bg-blush" id="about">
+  <section class="about-grid fade-in">
+    <div>
+      <div class="about-img-frame">
+        <div class="about-img-placeholder">
+          <div class="about-img-name">K.P.</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-text">
+      <span class="section-label">About Me</span>
+      <h2 class="section-title">I'm Kiah — your personal <em>style partner</em></h2>
+      <p>I'm a fashion stylist and personal shopper dedicated to helping you build a wardrobe that feels confident, effortless, and authentically you.</p>
+      <p>From curated shopping experiences to personalized styling, I make finding your signature look simple, enjoyable, and tailored to your lifestyle — whether you're building from scratch or refining what you already love.</p>
+      <div class="about-stats">
+        <div class="stat-item"><span class="stat-num">200+</span><span class="stat-label">Clients Styled</span></div>
+        <div class="stat-item"><span class="stat-num">5★</span><span class="stat-label">Average Rating</span></div>
+        <div class="stat-item"><span class="stat-num">8yr</span><span class="stat-label">Experience</span></div>
+      </div>
+      <button class="btn-outline" onclick="scrollToSection('services')">Explore Services</button>
+      <div class="signature">Kiah Parikh</div>
+    </div>
+  </section>
+</div>
+
+<!-- SERVICES -->
+<div id="services">
+  <section class="fade-in">
+    <span class="section-label">What I Offer</span>
+    <h2 class="section-title">Services crafted <em>for you</em></h2>
+    <p class="section-sub">Every service is tailored to your unique style, lifestyle, and goals. No templates — just you.</p>
+    <div class="services-grid">
+      <div class="service-card" onclick="scrollToSection('booking')">
+        <div class="service-icon">✦</div>
+        <div class="service-name">Personal Styling</div>
+        <p class="service-desc">One-on-one sessions to discover and define your personal aesthetic. We'll map your wardrobe goals and create a style direction just for you.</p>
+        <div class="service-price">From ₹8,000</div>
+        <span class="service-arrow">→</span>
+      </div>
+      <div class="service-card" onclick="scrollToSection('shopper')">
+        <div class="service-icon">◈</div>
+        <div class="service-name">Personal Shopping</div>
+        <p class="service-desc">I shop for you — selecting pieces that fit your budget, occasion, and signature style so every purchase feels intentional and inspired.</p>
+        <div class="service-price">From ₹5,000</div>
+        <span class="service-arrow">→</span>
+      </div>
+      <div class="service-card" onclick="scrollToSection('booking')">
+        <div class="service-icon">◎</div>
+        <div class="service-name">Virtual Styling</div>
+        <p class="service-desc">Styled from anywhere in the world. Digital lookbooks, video consultations, and personalized shopping links delivered to you.</p>
+        <div class="service-price">From ₹3,500</div>
+        <span class="service-arrow">→</span>
+      </div>
+      <div class="service-card" onclick="scrollToSection('booking')">
+        <div class="service-icon">❋</div>
+        <div class="service-name">Closet Edit</div>
+        <p class="service-desc">We declutter, reorganize, and restyle what you own — identifying gaps, creating outfits, and making your existing wardrobe work harder.</p>
+        <div class="service-price">From ₹6,000</div>
+        <span class="service-arrow">→</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- STYLE QUIZ -->
+<div class="bg-champagne" id="quiz">
+  <section class="fade-in" style="max-width:1200px">
+    <span class="section-label">Discover Your Style</span>
+    <h2 class="section-title">Take the <em>Style Quiz</em></h2>
+    <p class="section-sub">Seven questions to reveal your style personality and receive tailored recommendations.</p>
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-progress" id="quizProgress"></div>
+        <p class="quiz-step-label" id="quizStepLabel">Question 1 of 7</p>
+      </div>
+      <div id="quizBody"></div>
+    </div>
+  </section>
+</div>
+
+<!-- PERSONAL SHOPPER -->
+<div id="shopper">
+  <section class="fade-in">
+    <span class="section-label">Personal Shopping</span>
+    <h2 class="section-title">Your <em>interactive</em> closet</h2>
+    <p class="section-sub">Set your budget, choose your occasions, and start building your dream wardrobe.</p>
+    <div class="shopper-grid">
+      <div>
+        <div class="shopper-panel" style="margin-bottom:1.5rem">
+          <div class="panel-title">Budget Range</div>
+          <div class="budget-display" id="budgetDisplay">₹25,000</div>
+          <input type="range" class="budget-slider" id="budgetSlider" min="5000" max="100000" step="5000" value="25000">
+          <p style="font-size:0.75rem;color:var(--text-light)">Monthly styling & shopping budget</p>
+        </div>
+        <div class="shopper-panel">
+          <div class="panel-title">Occasions</div>
+          <div class="occasion-grid" id="occasionGrid">
+            <button class="occasion-tag active" onclick="toggleOccasion(this)">Everyday</button>
+            <button class="occasion-tag" onclick="toggleOccasion(this)">Work</button>
+            <button class="occasion-tag" onclick="toggleOccasion(this)">Vacation</button>
+            <button class="occasion-tag" onclick="toggleOccasion(this)">Wedding</button>
+            <button class="occasion-tag" onclick="toggleOccasion(this)">Party</button>
+            <button class="occasion-tag" onclick="toggleOccasion(this)">Date Night</button>
+            <button class="occasion-tag" onclick="toggleOccasion(this)">Formal</button>
+            <button class="occasion-tag" onclick="toggleOccasion(this)">Fitness</button>
+          </div>
+        </div>
+      </div>
+      <div class="shopper-panel">
+        <div class="panel-title">My Wishlist</div>
+        <div id="wishlist">
+          <div class="wishlist-item">
+            <div class="wishlist-dot" style="background:linear-gradient(135deg,#e8d5d5,#c8b8b8)"></div>
+            <div class="wishlist-info"><div class="wishlist-name">Linen Blazer — Ecru</div><div class="wishlist-price">₹4,200</div></div>
+            <button class="wishlist-heart" onclick="toggleHeart(this)" aria-label="Save to favourites">♡</button>
+          </div>
+          <div class="wishlist-item">
+            <div class="wishlist-dot" style="background:linear-gradient(135deg,#d4bcbc,#c0a8a8)"></div>
+            <div class="wishlist-info"><div class="wishlist-name">Silk Slip Dress — Dusty Rose</div><div class="wishlist-price">₹6,800</div></div>
+            <button class="wishlist-heart" onclick="toggleHeart(this)" aria-label="Save to favourites">♡</button>
+          </div>
+          <div class="wishlist-item">
+            <div class="wishlist-dot" style="background:linear-gradient(135deg,#c8c0b8,#b8b0a8)"></div>
+            <div class="wishlist-info"><div class="wishlist-name">Wide-Leg Trousers — Cream</div><div class="wishlist-price">₹3,500</div></div>
+            <button class="wishlist-heart" onclick="toggleHeart(this)" aria-label="Save to favourites">♡</button>
+          </div>
+          <div class="wishlist-item">
+            <div class="wishlist-dot" style="background:linear-gradient(135deg,#e0d8d0,#d0c8c0)"></div>
+            <div class="wishlist-info"><div class="wishlist-name">Cashmere Wrap — Ivory</div><div class="wishlist-price">₹8,900</div></div>
+            <button class="wishlist-heart" onclick="toggleHeart(this)" aria-label="Save to favourites">♡</button>
+          </div>
+        </div>
+        <button class="btn-outline" style="width:100%;margin-top:1.5rem" onclick="sendPrompt('I want to explore outfit recommendations for my personal shopper wishlist. My occasions are everyday and work, budget around ₹25,000.')">Get Curated Recommendations ↗</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- BEFORE/AFTER -->
+<div class="bg-blush">
+  <section class="fade-in">
+    <span class="section-label">Transformations</span>
+    <h2 class="section-title">Wardrobe <em>before & after</em></h2>
+    <p class="section-sub">Real clients, real transformations — a glimpse into the power of intentional styling.</p>
+    <div class="ba-grid">
+      <div class="ba-card">
+        <div class="ba-images">
+          <div class="ba-img ba-img-before"><div class="ba-badge">Before</div></div>
+          <div class="ba-img ba-img-after"><div class="ba-badge">After</div></div>
+        </div>
+        <div class="ba-info"><div class="ba-name">The Corporate Edit</div><div class="ba-detail">Complete wardrobe rebuild for a new role</div></div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-images">
+          <div class="ba-img ba-img-before"><div class="ba-badge">Before</div></div>
+          <div class="ba-img ba-img-after"><div class="ba-badge">After</div></div>
+        </div>
+        <div class="ba-info"><div class="ba-name">The Weekend Refresh</div><div class="ba-detail">Casual capsule wardrobe from scratch</div></div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-images">
+          <div class="ba-img ba-img-before"><div class="ba-badge">Before</div></div>
+          <div class="ba-img ba-img-after"><div class="ba-badge">After</div></div>
+        </div>
+        <div class="ba-info"><div class="ba-name">The Event Series</div><div class="ba-detail">Wedding season wardrobe planning</div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CLIENT DASHBOARD -->
+<div id="dashboard">
+  <section class="fade-in">
+    <span class="section-label">Client Portal</span>
+    <h2 class="section-title">Your <em>style dashboard</em></h2>
+    <p class="section-sub">Access your digital lookbooks, track your styling journey, and stay connected.</p>
+    <div class="dashboard">
+      <div class="dash-header">
+        <div>
+          <div class="dash-greeting">Welcome back, Priya ✦</div>
+          <div class="dash-meta">Styling plan active · Next session: 28 June</div>
+        </div>
+        <button class="btn-primary" onclick="scrollToSection('booking')">Book Follow-up</button>
+      </div>
+      <div class="dash-tabs">
+        <button class="dash-tab active" onclick="switchTab(this,'lookbook')">Lookbooks</button>
+        <button class="dash-tab" onclick="switchTab(this,'plan')">Styling Plan</button>
+        <button class="dash-tab" onclick="switchTab(this,'messages')">Messages</button>
+        <button class="dash-tab" onclick="switchTab(this,'purchases')">Purchases</button>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="dash-stat-num">3</div><div class="dash-stat-label">Active Lookbooks</div></div>
+        <div class="dash-stat"><div class="dash-stat-num">18</div><div class="dash-stat-label">Saved Outfits</div></div>
+        <div class="dash-stat"><div class="dash-stat-num">₹42K</div><div class="dash-stat-label">Purchases Tracked</div></div>
+      </div>
+      <div id="tabContent">
+        <div id="tabLookbook">
+          <p style="font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.75rem">My Lookbooks</p>
+          <div class="lookbook-row">
+            <div class="lookbook-item"><div class="lookbook-label">Spring Edit</div></div>
+            <div class="lookbook-item" style="background:linear-gradient(135deg,#dcd0c8,#ccc0b8)"><div class="lookbook-label">Work Capsule</div></div>
+            <div class="lookbook-item" style="background:linear-gradient(135deg,#d8d4e0,#c8c4d0)"><div class="lookbook-label">Weekend Mood</div></div>
+            <div class="lookbook-item" style="background:linear-gradient(135deg,#e0d8d0,#d0c8c0);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:rgba(201,169,110,0.5)">+</div>
+          </div>
+        </div>
+        <div id="tabPlan" style="display:none">
+          <p style="font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.75rem">Current Styling Plan</p>
+          <div style="border:1px solid rgba(201,169,110,0.2);padding:1.5rem">
+            <div style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--text-dark);margin-bottom:0.5rem">The Complete Edit — 3 Month Plan</div>
+            <p style="font-size:0.85rem;color:var(--text-mid);font-weight:300;line-height:1.7;margin-bottom:1rem">Focused on building a versatile capsule wardrobe for your new role, with a secondary mini-capsule for social occasions. Phase 1 complete. Phase 2 (shopping) begins this week.</p>
+            <div style="display:flex;gap:0.5rem">
+              <div style="flex:1;height:6px;background:var(--gold);border-radius:3px"></div>
+              <div style="flex:1;height:6px;background:var(--gold);border-radius:3px"></div>
+              <div style="flex:1;height:6px;background:rgba(201,169,110,0.2);border-radius:3px"></div>
+            </div>
+            <p style="font-size:0.72rem;color:var(--text-light);margin-top:0.5rem">Phase 2 of 3 · 67% complete</p>
+          </div>
+        </div>
+        <div id="tabMessages" style="display:none">
+          <div class="msg-thread">
+            <div class="msg-item">
+              <div class="msg-avatar">KP</div>
+              <div class="msg-content">
+                <div class="msg-name">Kiah Parikh</div>
+                <div class="msg-text">I've added three new pieces to your Phase 2 shopping list — linen blazer, silk camisole, and tailored trousers. Let me know your thoughts!</div>
+                <div class="msg-time">Today, 10:14 am</div>
+              </div>
+            </div>
+            <div class="msg-item" style="background:rgba(201,169,110,0.03)">
+              <div class="msg-avatar" style="background:linear-gradient(135deg,#b8c4b8,#a8b4a8)">P</div>
+              <div class="msg-content">
+                <div class="msg-name">Priya (you)</div>
+                <div class="msg-text">The linen blazer looks amazing! Can we also look for something for the Mehendi?</div>
+                <div class="msg-time">Today, 11:32 am</div>
+              </div>
+            </div>
+          </div>
+          <div class="msg-input-row">
+            <input class="msg-input" id="msgInput" placeholder="Write a message to Kiah…" type="text">
+            <button class="btn-primary" onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+        <div id="tabPurchases" style="display:none">
+          <p style="font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.75rem">Purchase History</p>
+          <div style="border:1px solid rgba(201,169,110,0.15);border-radius:4px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.75rem 1rem;background:rgba(201,169,110,0.06);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light)">
+              <span>Item</span><span>Date</span><span>Amount</span>
+            </div>
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.75rem 1rem;border-bottom:1px solid rgba(201,169,110,0.1);font-size:0.83rem;color:var(--text-mid)"><span>Ivory Linen Set</span><span>Jun 12</span><span style="color:var(--gold)">₹9,200</span></div>
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.75rem 1rem;border-bottom:1px solid rgba(201,169,110,0.1);font-size:0.83rem;color:var(--text-mid)"><span>Block-heeled Mules</span><span>Jun 5</span><span style="color:var(--gold)">₹4,800</span></div>
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.75rem 1rem;font-size:0.83rem;color:var(--text-mid)"><span>Structured Tote</span><span>May 28</span><span style="color:var(--gold)">₹7,500</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="bg-blush" id="testimonials">
+  <section class="fade-in">
+    <span class="section-label">Client Love</span>
+    <h2 class="section-title">Real women, <em>real results</em></h2>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">Kiah completely transformed how I see my wardrobe. I used to dread getting dressed — now I actually enjoy it. She understood my lifestyle perfectly and made every piece work together.</p>
+        <div class="testi-author"><div class="testi-avatar"></div><div><div class="testi-name">Rhea Mehta</div><div class="testi-role">Brand Consultant, Mumbai</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">The virtual styling session was incredible. She sent me a full digital lookbook with links, styling tips, and even occasion guides. Worth every rupee.</p>
+        <div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#c8d4c8,#b8c4b8)"></div><div><div class="testi-name">Ananya Sood</div><div class="testi-role">Product Manager, Bengaluru</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">My closet edit was a revelation. We discovered I had everything I needed — I just didn't know how to style it. Kiah is a genius at seeing potential in what you already own.</p>
+        <div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#d8c8d8,#c8b8c8)"></div><div><div class="testi-name">Sanya Kapoor</div><div class="testi-role">Architect, Delhi</div></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PRICING -->
+<div id="pricing">
+  <section class="fade-in">
+    <span class="section-label">Investment</span>
+    <h2 class="section-title">Transparent <em>pricing</em></h2>
+    <p class="section-sub">Choose the experience that best fits your styling goals. All packages are customisable.</p>
+    <div class="pricing-grid">
+      <div class="price-card" onclick="scrollToSection('booking')">
+        <div class="price-tier">Essentials</div>
+        <div class="price-num"><span>₹</span>3,500</div>
+        <div class="price-period">per session</div>
+        <ul class="price-features">
+          <li>60-min virtual consultation</li>
+          <li>Style personality report</li>
+          <li>Curated shopping list (10 items)</li>
+          <li>Email follow-up support</li>
+        </ul>
+        <button class="btn-outline" style="width:100%">Book This</button>
+      </div>
+      <div class="price-card featured" onclick="scrollToSection('booking')">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-tier">Signature</div>
+        <div class="price-num"><span>₹</span>9,500</div>
+        <div class="price-period">complete package</div>
+        <ul class="price-features">
+          <li>Full style consultation (2hr)</li>
+          <li>Personalized lookbook</li>
+          <li>Personal shopping (3hr)</li>
+          <li>Closet organisation session</li>
+          <li>2 weeks WhatsApp support</li>
+        </ul>
+        <button class="btn-primary" style="width:100%">Book This</button>
+      </div>
+      <div class="price-card" onclick="scrollToSection('booking')">
+        <div class="price-tier">Atelier</div>
+        <div class="price-num"><span>₹</span>22,000</div>
+        <div class="price-period">3-month retainer</div>
+        <ul class="price-features">
+          <li>Monthly styling sessions</li>
+          <li>Unlimited personal shopping</li>
+          <li>Seasonal wardrobe planning</li>
+          <li>Priority access & same-day replies</li>
+          <li>Ongoing digital lookbooks</li>
+        </ul>
+        <button class="btn-outline" style="width:100%">Book This</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FAQ -->
+<div class="bg-champagne">
+  <section class="fade-in">
+    <span class="section-label">Questions</span>
+    <h2 class="section-title" style="text-align:center">Frequently <em>Asked</em></h2>
+    <div class="faq-list" id="faqList"></div>
+  </section>
+</div>
+
+<!-- CONTACT -->
+<div id="contact">
+  <section class="fade-in">
+    <span class="section-label">Get In Touch</span>
+    <h2 class="section-title">Let's start your <em>style story</em></h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">✉</div>
+          <div><div class="contact-label">Email</div><div class="contact-val">hello@kiahparikh.com</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">◎</div>
+          <div><div class="contact-label">Instagram</div><div class="contact-val">@kiahparikh</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✦</div>
+          <div><div class="contact-label">Based In</div><div class="contact-val">Mumbai, India<br><span style="font-size:0.78rem;color:var(--text-light)">Virtual sessions worldwide</span></div></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">◈</div>
+          <div><div class="contact-label">Response Time</div><div class="contact-val">Within 24 hours</div></div>
+        </div>
+      </div>
+      <form class="contact-form" onsubmit="submitContact(event)">
+        <div class="form-row">
+          <div class="form-field"><label class="form-label">First Name</label><input class="form-input" placeholder="Priya" type="text" required></div>
+          <div class="form-field"><label class="form-label">Last Name</label><input class="form-input" placeholder="Sharma" type="text" required></div>
+        </div>
+        <div class="form-field"><label class="form-label">Email</label><input class="form-input" placeholder="priya@email.com" type="email" required></div>
+        <div class="form-field"><label class="form-label">Service Interest</label>
+          <select class="form-input" style="cursor:pointer">
+            <option>Personal Styling Session</option>
+            <option>Personal Shopping</option>
+            <option>Virtual Styling</option>
+            <option>Closet Edit</option>
+            <option>Atelier Retainer</option>
+          </select>
+        </div>
+        <div class="form-field"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Tell me a little about your style goals…"></textarea></div>
+        <button class="btn-primary" type="submit" style="align-self:flex-start">Send Message</button>
+        <p id="contactConfirm" style="display:none;font-size:0.85rem;color:var(--gold);margin-top:0.5rem">✦ Message received! I'll be in touch within 24 hours.</p>
+      </form>
+    </div>
+  </section>
+</div>
+
+<!-- BOOKING -->
+<div class="bg-blush" id="booking">
+  <section class="fade-in" style="max-width:1200px">
+    <span class="section-label">Book a Session</span>
+    <h2 class="section-title" style="text-align:center">Reserve your <em>styling appointment</em></h2>
+    <p class="section-sub" style="margin:0 auto;text-align:center">Select your preferred date and time. I'll confirm within a few hours.</p>
+    <div class="booking-cal">
+      <div class="cal-header">
+        <button class="cal-nav" onclick="changeMonth(-1)" aria-label="Previous month">‹</button>
+        <span class="cal-month" id="calMonth">July 2026</span>
+        <button class="cal-nav" onclick="changeMonth(1)" aria-label="Next month">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="time-slots" id="timeSlots" style="display:none"></div>
+      <div id="bookingConfirm" style="display:none;margin-top:1.5rem;text-align:center">
+        <p style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text-dark);margin-bottom:0.5rem">Session reserved ✦</p>
+        <p id="bookingDate" style="font-size:0.85rem;color:var(--text-mid);font-weight:300"></p>
+        <button class="btn-primary" style="margin-top:1rem" onclick="scrollToSection('contact')">Complete Your Booking</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Kiah <span>Parikh</span></div>
+        <p class="footer-tagline">Fashion stylist and personal shopper helping women build wardrobes that feel confidently, effortlessly themselves.</p>
+        <div class="footer-social">
+          <button class="social-btn" aria-label="Instagram">◎</button>
+          <button class="social-btn" aria-label="Pinterest">◈</button>
+          <button class="social-btn" aria-label="WhatsApp">✦</button>
+          <button class="social-btn" aria-label="YouTube">▶</button>
+        </div>
+      </div>
+      <div>
+        <div class="footer-h">Services</div>
+        <ul class="footer-links">
+          <li><a onclick="scrollToSection('services')">Personal Styling</a></li>
+          <li><a onclick="scrollToSection('shopper')">Personal Shopping</a></li>
+          <li><a onclick="scrollToSection('services')">Virtual Styling</a></li>
+          <li><a onclick="scrollToSection('services')">Closet Edit</a></li>
+          <li><a onclick="scrollToSection('pricing')">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-h">Explore</div>
+        <ul class="footer-links">
+          <li><a onclick="scrollToSection('quiz')">Style Quiz</a></li>
+          <li><a onclick="scrollToSection('dashboard')">Client Portal</a></li>
+          <li><a onclick="scrollToSection('testimonials')">Reviews</a></li>
+          <li><a>Style Journal</a></li>
+          <li><a onclick="scrollToSection('faq')">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-h">Connect</div>
+        <ul class="footer-links">
+          <li><a onclick="scrollToSection('contact')">Contact Me</a></li>
+          <li><a onclick="scrollToSection('booking')">Book a Session</a></li>
+          <li><a>@kiahparikh on Instagram</a></li>
+          <li><a>hello@kiahparikh.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Kiah Parikh. All rights reserved.</span>
+      <span>Privacy Policy · Terms</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+function scrollToSection(id){
+  const el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// QUIZ
+const quizData=[
+  {q:"What's your go-to colour family?",sub:"Pick what feels most like you",opts:["Neutral & warm tones","Bold & saturated","Soft pastels & blush","Black & monochrome"]},
+  {q:"How would you describe your lifestyle?",sub:"Most of your days involve…",opts:["Creative studio / freelance","Corporate office","Active & on-the-go","Social events & dining"]},
+  {q:"Which silhouette speaks to you?",sub:"When you imagine your best outfit…",opts:["Flowy & relaxed","Tailored & structured","Fitted & minimal","Layered & eclectic"]},
+  {q:"Who inspires your style?",sub:"The aesthetic you gravitate toward",opts:["Old-money quiet luxury","90s supermodel cool","Parisian effortless chic","Maximalist editorial"]},
+  {q:"What's your shopping habit?",sub:"When you need something new…",opts:["I curate carefully, invest in classics","I hunt for unique vintage finds","I follow trends selectively","I buy what I love, no rules"]},
+  {q:"How important is comfort?",sub:"Honesty is key here",opts:["Style always comes first","Comfort is non-negotiable","I balance both equally","Depends on the occasion"]},
+  {q:"What's your monthly styling budget?",sub:"Including clothes, accessories, alterations",opts:["Under ₹5,000","₹5,000–₹15,000","₹15,000–₹40,000","₹40,000+"]}
+];
+const styleTypes=["The Quiet Luxurist","The Modern Minimalist","The Effortless Romantic","The Bold Creative"];
+const styleDescs=["You gravitate toward investment pieces, clean lines, and an understated confidence. Your wardrobe is curated, not collected.","Your style is refined and intentional — neutral tones, perfect fits, and quality over quantity. Less, but always better.","Softness, flow, and femininity guide your choices. Your wardrobe tells a story of grace and modern romance.","You express yourself through fashion fearlessly. Your wardrobe is an art collection — unexpected, vibrant, uniquely you."];
+let quizStep=0;const quizAnswers=[];
+function renderQuiz(){
+  const prog=document.getElementById('quizProgress');
+  prog.innerHTML=quizData.map((q,i)=>`<div class="quiz-dot${i<=quizStep?' active':''}"></div>`).join('');
+  document.getElementById('quizStepLabel').textContent=`Question ${quizStep+1} of ${quizData.length}`;
+  const d=quizData[quizStep];
+  document.getElementById('quizBody').innerHTML=`
+    <div class="quiz-q">${d.q}</div>
+    <p class="quiz-sub">${d.sub}</p>
+    <div class="quiz-options">${d.opts.map((o,i)=>`<button class="quiz-opt${quizAnswers[quizStep]===i?' selected':''}" onclick="selectOpt(${i})">${o}</button>`).join('')}</div>
+    <div class="quiz-nav">
+      <button class="btn-ghost" onclick="quizBack()" style="${quizStep===0?'visibility:hidden':''}">← Back</button>
+      <button class="btn-primary" onclick="quizNext()" ${quizAnswers[quizStep]===undefined?'disabled style="opacity:0.4"':''}>
+        ${quizStep===quizData.length-1?'See My Style →':'Next →'}
+      </button>
+    </div>`;
+}
+function selectOpt(i){quizAnswers[quizStep]=i;renderQuiz()}
+function quizNext(){if(quizAnswers[quizStep]===undefined)return;if(quizStep<quizData.length-1){quizStep++;renderQuiz()}else showResult()}
+function quizBack(){if(quizStep>0){quizStep--;renderQuiz()}}
+function showResult(){
+  const typeIdx=quizAnswers[0]%4;
+  const container=document.getElementById('quizBody');
+  container.innerHTML=`<div class="quiz-result">
+    <div class="quiz-result-title">You're ${styleTypes[typeIdx]}</div>
+    <div class="quiz-result-badge">${styleTypes[typeIdx]}</div>
+    <p class="quiz-result-desc">${styleDescs[typeIdx]} Book a consultation to get your personalised style plan, curated lookbook, and shopping list.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center">
+      <button class="btn-primary" onclick="scrollToSection('booking')">Book a Consultation</button>
+      <button class="btn-outline" onclick="quizStep=0;quizAnswers.length=0;renderQuiz()">Retake Quiz</button>
+    </div>
+  </div>`;
+  document.getElementById('quizProgress').innerHTML=quizData.map(()=>`<div class="quiz-dot active"></div>`).join('');
+  document.getElementById('quizStepLabel').textContent='Your style personality';
+}
+renderQuiz();
+
+// BUDGET SLIDER
+const slider=document.getElementById('budgetSlider');
+if(slider)slider.addEventListener('input',()=>{
+  document.getElementById('budgetDisplay').textContent='₹'+parseInt(slider.value).toLocaleString('en-IN');
+});
+function toggleOccasion(el){el.classList.toggle('active')}
+function toggleHeart(el){el.textContent=el.textContent==='♡'?'♥':'♡';el.style.color=el.textContent==='♥'?'#d4a0a0':'var(--rose)'}
+
+// DASHBOARD TABS
+function switchTab(btn,name){
+  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  ['lookbook','plan','messages','purchases'].forEach(t=>{
+    const el=document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(el) el.style.display=t===name?'block':'none';
+  });
+}
+function sendMessage(){
+  const inp=document.getElementById('msgInput');
+  if(!inp||!inp.value.trim())return;
+  const thread=document.querySelector('.msg-thread');
+  const div=document.createElement('div');
+  div.className='msg-item';
+  div.style.background='rgba(201,169,110,0.03)';
+  div.innerHTML=`<div class="msg-avatar" style="background:linear-gradient(135deg,#b8c4b8,#a8b4a8)">P</div><div class="msg-content"><div class="msg-name">Priya (you)</div><div class="msg-text">${inp.value}</div><div class="msg-time">Just now</div></div>`;
+  thread.appendChild(div);inp.value='';thread.scrollTop=thread.scrollHeight;
+}
+
+// FAQ
+const faqs=[
+  {q:"How does a personal styling session work?",a:"We start with an in-depth consultation — either in-person or virtually — to understand your lifestyle, goals, and current wardrobe. From there, I create a personalised style plan and we work through it together."},
+  {q:"Do you offer virtual sessions?",a:"Yes! All my services are available virtually. You receive a digital lookbook, curated shopping links, and ongoing WhatsApp support. Many of my clients are across India and internationally."},
+  {q:"What should I bring to a closet edit?",a:"Just your current wardrobe! I'll walk you through everything — we'll sort, style, and identify what stays, what goes, and what you actually need. No prep needed."},
+  {q:"How far in advance should I book?",a:"I typically have availability 1–2 weeks out. For the Atelier retainer, I recommend booking at least 3–4 weeks ahead as these spots are limited."},
+  {q:"Do you shop for specific occasions like weddings?",a:"Absolutely. Indian wedding season, destination events, international travel — I create tailored shopping plans for any occasion with a full outfit breakdown."},
+  {q:"Can we work together if I'm on a tight budget?",a:"Yes! The Essentials package starts at ₹3,500 and I always work within your shopping budget — whatever it is. Style is not about spending more, it's about spending smarter."}
+];
+const faqList=document.getElementById('faqList');
+if(faqList)faqList.innerHTML=faqs.map((f,i)=>`
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(${i})" aria-expanded="false" id="faqq${i}">${f.q}<span class="faq-icon" id="faqicon${i}">+</span></button>
+    <div class="faq-a" id="faqa${i}"><p>${f.a}</p></div>
+  </div>`).join('');
+function toggleFaq(i){
+  const a=document.getElementById('faqa'+i);
+  const ic=document.getElementById('faqicon'+i);
+  const btn=document.getElementById('faqq'+i);
+  const open=a.classList.toggle('open');
+  ic.textContent=open?'−':'+';
+  btn.setAttribute('aria-expanded',open);
+}
+
+// CONTACT FORM
+function submitContact(e){e.preventDefault();document.getElementById('contactConfirm').style.display='block';e.target.reset()}
+
+// CALENDAR
+let calYear=2026,calMonth=6;
+const dayLabels=['Su','Mo','Tu','We','Th','Fr','Sa'];
+const available=[2,3,4,7,8,9,10,14,15,16,17,21,22,23,24,28,29,30];
+const times=['9:00 am','10:30 am','12:00 pm','2:00 pm','3:30 pm','5:00 pm'];
+let selDay=null,selTime=null;
+function renderCal(){
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calMonth').textContent=`${monthNames[calMonth]} ${calYear}`;
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  let html=dayLabels.map(d=>`<div class="cal-day-label">${d}</div>`).join('');
+  for(let i=0;i<firstDay;i++)html+=`<div></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const isAvail=available.includes(d);
+    const isSel=selDay===d;
+    const isToday=calYear===2026&&calMonth===6&&d===26;
+    html+=`<div class="cal-day${isAvail?' available':'disabled'}${isSel?' selected':''}${isToday&&!isSel?' today':''}" onclick="${isAvail?`selectDay(${d})`:''}">${d}</div>`;
+  }
+  document.getElementById('calGrid').innerHTML=html;
+}
+function selectDay(d){
+  selDay=d;selTime=null;renderCal();
+  const ts=document.getElementById('timeSlots');
+  ts.style.display='grid';
+  ts.innerHTML=times.map(t=>`<button class="time-slot" onclick="selectTime('${t}',this)">${t}</button>`).join('');
+  document.getElementById('bookingConfirm').style.display='none';
+}
+function selectTime(t,el){
+  selTime=t;
+  document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('bookingConfirm').style.display='block';
+  document.getElementById('bookingDate').textContent=`${selDay} ${monthNames[calMonth]} ${calYear} at ${selTime}`;
+}
+function changeMonth(dir){
+  calMonth+=dir;
+  if(calMonth>11){calMonth=0;calYear++}
+  if(calMonth<0){calMonth=11;calYear--}
+  selDay=null;selTime=null;
+  renderCal();
+  document.getElementById('timeSlots').style.display='none';
+  document.getElementById('bookingConfirm').style.display='none';
+}
+renderCal();
+
+// SCROLL ANIMATIONS
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+</script>
