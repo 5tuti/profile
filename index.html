@@ -63,8 +63,20 @@
   /* ABOUT */
   .about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:center}
   .about-img-frame{position:relative;aspect-ratio:3/4;background:linear-gradient(135deg,#e8d5d5,#d4bcbc);overflow:hidden;max-width:340px}
-  .about-img-frame::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;border:1px solid rgba(201,169,110,0.4);pointer-events:none;z-index:2}
-  .about-img-placeholder{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2rem}
+  .about-img-placeholder{
+    width: 100%;
+    height:100%; /* Adjust as needed */
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.about-img-placeholder img{
+    width: 120%;
+    height:100%;
+    object-fit:contain;   /* Shows the whole image */
+}
   .about-img-name{font-family:'Playfair Display',serif;font-style:italic;font-size:2.5rem;color:rgba(255,255,255,0.6)}
   .about-text p{font-size:0.95rem;line-height:1.9;color:var(--text-mid);margin-bottom:1rem;font-weight:300}
   .about-stats{display:flex;gap:2.5rem;margin:2rem 0}
@@ -333,7 +345,7 @@
   <div class="hero-img-side">
     <div class="hero-img-overlay"></div>
     <div class="hero-img-placeholder">
-      <div style="text-align:center;color:rgba(255,255,255,0.35);font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;padding:2rem">Your portrait<br>here</div>
+    <img src="https://images.unsplash.com/photo-1519748771451-a94c596fad67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Personal Stylist">
     </div>
     <div class="hero-name-stamp">Kiah<br>Parikh</div>
     <!-- Sparkles -->
@@ -351,7 +363,9 @@
     <div>
       <div class="about-img-frame">
         <div class="about-img-placeholder">
-          <div class="about-img-name">K.P.</div>
+          <div class="about-img-name">
+            <img src="https://madish.in/wp-content/uploads/2025/01/vintage_-bell_-bottom_-high_-waist_-jeans_ecom_misc_feb_2026_img_lr_6.webp" alt="Personal Stylist">
+</div>
         </div>
       </div>
     </div>
@@ -516,94 +530,6 @@
   </section>
 </div>
 
-<!-- CLIENT DASHBOARD -->
-<div id="dashboard">
-  <section class="fade-in">
-    <span class="section-label">Client Portal</span>
-    <h2 class="section-title">Your <em>style dashboard</em></h2>
-    <p class="section-sub">Access your digital lookbooks, track your styling journey, and stay connected.</p>
-    <div class="dashboard">
-      <div class="dash-header">
-        <div>
-          <div class="dash-greeting">Welcome back, Priya ✦</div>
-          <div class="dash-meta">Styling plan active · Next session: 28 June</div>
-        </div>
-        <button class="btn-primary" onclick="scrollToSection('booking')">Book Follow-up</button>
-      </div>
-      <div class="dash-tabs">
-        <button class="dash-tab active" onclick="switchTab(this,'lookbook')">Lookbooks</button>
-        <button class="dash-tab" onclick="switchTab(this,'plan')">Styling Plan</button>
-        <button class="dash-tab" onclick="switchTab(this,'messages')">Messages</button>
-        <button class="dash-tab" onclick="switchTab(this,'purchases')">Purchases</button>
-      </div>
-      <div class="dash-grid">
-        <div class="dash-stat"><div class="dash-stat-num">3</div><div class="dash-stat-label">Active Lookbooks</div></div>
-        <div class="dash-stat"><div class="dash-stat-num">18</div><div class="dash-stat-label">Saved Outfits</div></div>
-        <div class="dash-stat"><div class="dash-stat-num">₹42K</div><div class="dash-stat-label">Purchases Tracked</div></div>
-      </div>
-      <div id="tabContent">
-        <div id="tabLookbook">
-          <p style="font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.75rem">My Lookbooks</p>
-          <div class="lookbook-row">
-            <div class="lookbook-item"><div class="lookbook-label">Spring Edit</div></div>
-            <div class="lookbook-item" style="background:linear-gradient(135deg,#dcd0c8,#ccc0b8)"><div class="lookbook-label">Work Capsule</div></div>
-            <div class="lookbook-item" style="background:linear-gradient(135deg,#d8d4e0,#c8c4d0)"><div class="lookbook-label">Weekend Mood</div></div>
-            <div class="lookbook-item" style="background:linear-gradient(135deg,#e0d8d0,#d0c8c0);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:rgba(201,169,110,0.5)">+</div>
-          </div>
-        </div>
-        <div id="tabPlan" style="display:none">
-          <p style="font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.75rem">Current Styling Plan</p>
-          <div style="border:1px solid rgba(201,169,110,0.2);padding:1.5rem">
-            <div style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--text-dark);margin-bottom:0.5rem">The Complete Edit — 3 Month Plan</div>
-            <p style="font-size:0.85rem;color:var(--text-mid);font-weight:300;line-height:1.7;margin-bottom:1rem">Focused on building a versatile capsule wardrobe for your new role, with a secondary mini-capsule for social occasions. Phase 1 complete. Phase 2 (shopping) begins this week.</p>
-            <div style="display:flex;gap:0.5rem">
-              <div style="flex:1;height:6px;background:var(--gold);border-radius:3px"></div>
-              <div style="flex:1;height:6px;background:var(--gold);border-radius:3px"></div>
-              <div style="flex:1;height:6px;background:rgba(201,169,110,0.2);border-radius:3px"></div>
-            </div>
-            <p style="font-size:0.72rem;color:var(--text-light);margin-top:0.5rem">Phase 2 of 3 · 67% complete</p>
-          </div>
-        </div>
-        <div id="tabMessages" style="display:none">
-          <div class="msg-thread">
-            <div class="msg-item">
-              <div class="msg-avatar">KP</div>
-              <div class="msg-content">
-                <div class="msg-name">Kiah Parikh</div>
-                <div class="msg-text">I've added three new pieces to your Phase 2 shopping list — linen blazer, silk camisole, and tailored trousers. Let me know your thoughts!</div>
-                <div class="msg-time">Today, 10:14 am</div>
-              </div>
-            </div>
-            <div class="msg-item" style="background:rgba(201,169,110,0.03)">
-              <div class="msg-avatar" style="background:linear-gradient(135deg,#b8c4b8,#a8b4a8)">P</div>
-              <div class="msg-content">
-                <div class="msg-name">Priya (you)</div>
-                <div class="msg-text">The linen blazer looks amazing! Can we also look for something for the Mehendi?</div>
-                <div class="msg-time">Today, 11:32 am</div>
-              </div>
-            </div>
-          </div>
-          <div class="msg-input-row">
-            <input class="msg-input" id="msgInput" placeholder="Write a message to Kiah…" type="text">
-            <button class="btn-primary" onclick="sendMessage()">Send</button>
-          </div>
-        </div>
-        <div id="tabPurchases" style="display:none">
-          <p style="font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.75rem">Purchase History</p>
-          <div style="border:1px solid rgba(201,169,110,0.15);border-radius:4px;overflow:hidden">
-            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.75rem 1rem;background:rgba(201,169,110,0.06);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light)">
-              <span>Item</span><span>Date</span><span>Amount</span>
-            </div>
-            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.75rem 1rem;border-bottom:1px solid rgba(201,169,110,0.1);font-size:0.83rem;color:var(--text-mid)"><span>Ivory Linen Set</span><span>Jun 12</span><span style="color:var(--gold)">₹9,200</span></div>
-            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.75rem 1rem;border-bottom:1px solid rgba(201,169,110,0.1);font-size:0.83rem;color:var(--text-mid)"><span>Block-heeled Mules</span><span>Jun 5</span><span style="color:var(--gold)">₹4,800</span></div>
-            <div style="display:grid;grid-template-columns:2fr 1fr 1fr;padding:0.75rem 1rem;font-size:0.83rem;color:var(--text-mid)"><span>Structured Tote</span><span>May 28</span><span style="color:var(--gold)">₹7,500</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
 <!-- TESTIMONIALS -->
 <div class="bg-blush" id="testimonials">
   <section class="fade-in">
@@ -700,11 +626,15 @@
       <div class="contact-info">
         <div class="contact-item">
           <div class="contact-icon">✉</div>
-          <div><div class="contact-label">Email</div><div class="contact-val">hello@kiahparikh.com</div></div>
+          <div><div class="contact-label">Email</div><div class="contact-val">connectkiah@gmail.com</div></div>
         </div>
         <div class="contact-item">
           <div class="contact-icon">◎</div>
-          <div><div class="contact-label">Instagram</div><div class="contact-val">@kiahparikh</div></div>
+          <div><div class="contact-label">Instagram</div><div class="contact-val">@k1ahp</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">◎</div>
+          <div><div class="contact-label">Contact Number</div><div class="contact-val">+91 9619144766</div></div>
         </div>
         <div class="contact-item">
           <div class="contact-icon">✦</div>
@@ -800,8 +730,10 @@
         <ul class="footer-links">
           <li><a onclick="scrollToSection('contact')">Contact Me</a></li>
           <li><a onclick="scrollToSection('booking')">Book a Session</a></li>
-          <li><a>@kiahparikh on Instagram</a></li>
-          <li><a>hello@kiahparikh.com</a></li>
+          <li><a>@k1ahp on Instagram</a></li>
+          <li><a>connectkiah@gmail.com</a></li>
+          <li><a>+91 9619144766</a></li>
+
         </ul>
       </div>
     </div>
